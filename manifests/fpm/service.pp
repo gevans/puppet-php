@@ -39,7 +39,10 @@ define php::fpm::service(
     service { "dev.php-fpm.${version}":
       ensure    => running,
       subscribe => File["/Library/LaunchDaemons/dev.php-fpm.${version}.plist"],
-      require   => File["${nginx::config::configdir}/fastcgi_params"],
+      require   => [
+        Exec["php-install-${version}"],
+        File["${nginx::config::configdir}/fastcgi_params"],
+      ]
     }
 
   } else {
